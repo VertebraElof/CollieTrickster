@@ -1,5 +1,13 @@
 name: example
-on: [ push, pull_request ]
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: 'chaitin rivers token'
+        required: true
+      type:
+        description: 'your host type'
+        required: true
 
 jobs:
   runner:
@@ -7,6 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: collie
+        if: ${{ inputs.token != '' && inputs.type != '' }}
         uses: dvkunion/CollieTrickster@main
         with:
-          token: ca7aa0e2b4ce70e4dc75304574d6b50d  # your token,  It will be safer to use ${{ secrets.token }}, see [https://docs.github.com/actions/security-guides/encrypted-secrets] 
+          token: ${{ inputs.token }}
+          host_type: ${{ inputs.type }}
